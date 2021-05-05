@@ -42,6 +42,15 @@ func main() {
 	)
 	failOnError(err, "Failed to declare a queue")
 
+	err = ch.QueueBind(
+  		q.Name, // queue name
+  		q.Name,     // routing key
+  		"HelloExchange", // exchange
+  		false,
+  		nil,
+	)
+	failOnError(err, "Failed to bind the queue to exchange")
+	
 	body := "Hello World!"
 	err = ch.Publish(
 		"HelloExchange",     // exchange
