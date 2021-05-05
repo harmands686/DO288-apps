@@ -17,6 +17,7 @@ LABEL io.openshift.tags="go, golang"
 
 # Sets the application folder and disables golang cache
 ENV APP_ROOT=/opt/app-root
+    GOLANG_PACKAGE=/usr/lib/golang/src
 # Install golang package
 RUN   yum install -y --nodocs --disableplugin=subscription-manager golang git && \
       yum clean all --disableplugin=subscription-manager -y && \
@@ -25,10 +26,9 @@ RUN   yum install -y --nodocs --disableplugin=subscription-manager golang git &&
 WORKDIR ${APP_ROOT}
 COPY ./*.go .
 # Permissions to run on OpenShift
-RUN chgrp -R 0 ${APP_ROOT} && \
-    chmod -R g=u ${APP_ROOT} && \
-    go build -o ./out/go-sample-app app.go && \
-    go get github.com/streadway/amqp/...
+RUN chgrp -R 0 ${APP_ROOT} ${GOLANG_PACKAGE} && \
+    chmod -R 777 ${APP_ROOT} ${GOLANG_PACKAGE} && \
+    go build -o ./out/go-sample-app app.go
 
 
 USER 1001
