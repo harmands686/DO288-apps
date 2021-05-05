@@ -28,7 +28,9 @@ COPY ./*.go .
 # Permissions to run on OpenShift
 RUN chgrp -R 0 ${APP_ROOT} ${GOLANG_PACKAGE} && \
     chmod -R 777 ${APP_ROOT} ${GOLANG_PACKAGE} && \
-    go build -o ./out/go-sample-app app.go
+    git clone http://github.com/streadway/amqp && \
+    go build -o ./out/go-sample-app app.go && \
+    go build -o ./out/go-sample-app send.go
 
 
 USER 1001
