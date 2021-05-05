@@ -30,8 +30,8 @@ RUN chgrp -R 0 ${APP_ROOT} ${GOLANG_PACKAGE} && \
     chmod -R 777 ${APP_ROOT} ${GOLANG_PACKAGE} && \
     git -C ${GOLANG_PACKAGE} clone http://github.com/streadway/amqp && \
     go build -o ./out/go-sample-app app.go && \
-    go build -o ./out/go-rabbitmq-app send.go
-
+    go build -o ./out/send-rabbitmq-app send.go && \
+    go build -o ./out/consume-rabbitmq-app consume.go
 
 USER 1001
 
