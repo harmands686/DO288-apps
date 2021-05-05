@@ -19,20 +19,16 @@ LABEL io.openshift.tags="go, golang"
 ENV APP_ROOT=/opt/app-root
 # Install golang package
 RUN   yum install -y --nodocs --disableplugin=subscription-manager golang && \
-      yum clean all --disableplugin=subscription-manager -y 
-
-# Permissions to run on OpenShift
-RUN mkdir -p ${APP_ROOT} && \
-    chown -R 1001:1001 ${APP_ROOT} && \
-    chgrp -R 0 ${APP_ROOT} && \
-    chmod -R g=u ${APP_ROOT}
+      yum clean all --disableplugin=subscription-manager -y && \
+      mkdir -p ${APP_ROOT} 
 
 WORKDIR ${APP_ROOT}
-# This default user is created in the rhel7 image
-
 COPY ./*.go .
+# Permissions to run on OpenShift
+RUN chgrp -R 0 ${APP_ROOT} && \
+    chmod -R g=u ${APP_ROOT} && \
+    go build -o ./out/go-sample-app app.go
 
-RUN go build -o ./out/go-sample-app app.go
 
 USER 1001
 
