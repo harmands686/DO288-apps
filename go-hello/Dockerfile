@@ -18,7 +18,7 @@ LABEL io.openshift.tags="go, golang"
 # Sets the application folder and disables golang cache
 ENV APP_ROOT=/opt/app-root
 # Install golang package
-RUN   yum install -y --nodocs --disableplugin=subscription-manager golang && \
+RUN   yum install -y --nodocs --disableplugin=subscription-manager golang git && \
       yum clean all --disableplugin=subscription-manager -y && \
       mkdir -p ${APP_ROOT} 
 
