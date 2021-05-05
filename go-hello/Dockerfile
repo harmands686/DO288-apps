@@ -28,7 +28,7 @@ COPY ./*.go .
 RUN chgrp -R 0 ${APP_ROOT} && \
     chmod -R g=u ${APP_ROOT} && \
     go build -o ./out/go-sample-app app.go && \
-    go get github.com/streadyway/amqp
+    go get github.com/streadway/amqp/...
 
 
 USER 1001
