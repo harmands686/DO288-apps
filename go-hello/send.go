@@ -21,9 +21,20 @@ func main() {
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
 
+	err = ch.ExchangeDeclare(
+                "HelloExchange",   // name
+                "topic", // type
+                true,     // durable
+                false,    // auto-deleted
+                false,    // internal
+                false,    // no-wait
+                nil,      // arguments
+        )
+	failOnError(err, "Failed to declare an exchange")
+	
 	q, err := ch.QueueDeclare(
-		"hello", // name
-		false,   // durable
+		"HelloQueue", // name
+		true,   // durable
 		false,   // delete when unused
 		false,   // exclusive
 		false,   // no-wait
@@ -33,7 +44,7 @@ func main() {
 
 	body := "Hello World!"
 	err = ch.Publish(
-		"",     // exchange
+		"HelloExchange",     // exchange
 		q.Name, // routing key
 		false,  // mandatory
 		false,  // immediate
