@@ -16,7 +16,7 @@ LABEL io.k8s.description="A Go programming language image" \
 LABEL io.openshift.tags="go, golang"
 
 # Sets the application folder and disables golang cache
-ENV APP_ROOT=/opt/app-root
+ENV APP_ROOT=/opt/app-root \
     GOLANG_PACKAGE=/usr/lib/golang/src
 # Install golang package
 RUN   yum install -y --nodocs --disableplugin=subscription-manager golang git && \
