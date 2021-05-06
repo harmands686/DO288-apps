@@ -13,15 +13,18 @@ func failOnError(err error, msg string) {
 }
 
 func main() {
-	conn, err := amqp.Dial("amqp://guest:guest@rabbitmq-1.rabbitmq.rabbits.svc.cluster.local:5672/")
-	failOnError(err, "Failed to connect to RabbitMQ")
-	defer conn.Close()
+        //conn, err := amqp.Dial("amqp://guest:guest@rabbitmq-1.rabbitmq.rabbits.svc.cluster.local:5672/")
+        conn, err := amqp.Dial("amqp://guest:guest@rabbitmq-balancer:5672/")
+        failOnError(err, "Failed to connect to RabbitMQ")
+        defer conn.Close()
 
-	ch, err := conn.Channel()
-	failOnError(err, "Failed to open a channel")
-	defer ch.Close()
+        ch, err := conn.Channel()
+        failOnError(err, "Failed to open a channel")
+        defer ch.Close()
 
-	err = ch.ExchangeDeclare(
+        //*************Exchange declaration*************
+
+        err = ch.ExchangeDeclare(
                 "HelloExchange",   // name
                 "topic", // type
                 true,     // durable
@@ -30,37 +33,61 @@ func main() {
                 false,    // no-wait
                 nil,      // arguments
         )
-	failOnError(err, "Failed to declare an exchange")
-	
-	q, err := ch.QueueDeclare(
-		"HelloQueue", // name
-		true,   // durable
-		false,   // delete when unused
-		false,   // exclusive
-		false,   // no-wait
-		nil,     // arguments
-	)
-	failOnError(err, "Failed to declare a queue")
+        failOnError(err, "Failed to declare an exchange")
 
-	err = ch.QueueBind(
-  		q.Name, // queue name
-  		q.Name,     // routing key
-  		"HelloExchange", // exchange
-  		false,
-  		nil,
-	)
-	failOnError(err, "Failed to bind the queue to exchange")
-	
-	body := "Hello World!"
-	err = ch.Publish(
-		"HelloExchange",     // exchange
-		q.Name, // routing key
-		false,  // mandatory
-		false,  // immediate
-		amqp.Publishing{
-			ContentType: "text/plain",
-			Body:        []byte(body),
-		})
-	failOnError(err, "Failed to publish a message")
-	log.Printf(" [x] Sent %s", body)
+        //*****************Queues declarations*************************
+        q1, err := ch.QueueDeclare(
+                "hello_queue1", // name
+                true,   // durable
+                false,   // delete when unused
+                false,   // exclusive
+false,   // no-wait
+                nil,     // arguments
+        )
+        failOnError(err, "Failed to declare a queue")
+
+        q2, err := ch.QueueDeclare(
+               "hello_queue2", // name
+                true,   // durable
+                false,   // delete when unused
+                false,   // exclusive
+                false,   // no-wait
+                nil,     // arguments
+        )
+        failOnError(err, "Failed to declare a queue")
+
+
+        //********************Queues bindings**************************
+        err = ch.QueueBind(
+                q1.Name, // queue name
+                "hello.*",     // routing key
+                "TopicExchange", // exchange
+                false,    //nowait
+                nil,
+        )
+        failOnError(err, "Failed to bind the queue to exchange")
+
+         err = ch.QueueBind(
+                q2.Name, // queue name
+                "hello.*",     // routing key
+                "TopicExchange", // exchange
+                false,    //nowait
+                nil,
+        )
+        failOnError(err, "Failed to bind the queue to exchange")
+
+
+        //**************Message publish***********************
+        body := "Hello World!"
+        err = ch.Publish(
+                "HelloExchange",     // exchange
+                "hello.world", // routing key
+		 false,  // mandatory
+                false,  // immediate
+                amqp.Publishing{
+                        ContentType: "text/plain",
+                        Body:        []byte(body),
+                })
+        failOnError(err, "Failed to publish a message")
+        log.Printf(" [x] Sent %s", body)
 }
