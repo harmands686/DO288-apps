@@ -61,7 +61,7 @@ false,   // no-wait
         err = ch.QueueBind(
                 q1.Name, // queue name
                 "hello.*",     // routing key
-                "TopicExchange", // exchange
+                "HelloExchange", // exchange
                 false,    //nowait
                 nil,
         )
@@ -70,7 +70,7 @@ false,   // no-wait
          err = ch.QueueBind(
                 q2.Name, // queue name
                 "hello.*",     // routing key
-                "TopicExchange", // exchange
+                "HelloExchange", // exchange
                 false,    //nowait
                 nil,
         )
