@@ -34,7 +34,7 @@ RUN chgrp -R 0 ${APP_ROOT} ${GOLANG_PACKAGE} && \
     go build -o ./out/subscriber1-rabbitmq-app subscriber1.go && \
     go build -o ./out/subscriber2-rabbitmq-app subscriber2.go
 
-USER 1001
+USER 0
 
 EXPOSE 8080
 
