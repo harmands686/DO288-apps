@@ -33,14 +33,14 @@ func main() {
 
 	msgs, err := ch.Consume(
 		q.Name, // queue
-		"consumer2",     // consumer
+		"subscriber2",     // consumer
 		true,   // auto-ack
 		false,  // exclusive
 		false,  // no-local
 		false,  // no-wait
 		nil,    // args
 	)
-	failOnError(err, "Failed to register a consumer2")
+	failOnError(err, "Failed to register a subscriber2")
 
 	for d := range msgs {
 		log.Printf("Received a message: %s", d.Body)
