@@ -31,9 +31,9 @@ RUN chgrp -R 0 ${APP_ROOT} ${GOLANG_PACKAGE} && \
     git -C ${GOLANG_PACKAGE} clone http://github.com/streadway/amqp && \
     go build -o ./out/go-sample-app app.go && \
     go build -o ./out/publisher publisher.go && \
-    go build -o ./out/subscriber1-queue1 subscriber_of_queue1.go && \
-    go build -o ./out/subscriber1-queue2 subscriber_of_queue2.go && \
-    go build -o ./out/subscriber2-queue2 subscriber_of_queue2.go
+    go build -o ./out/consumer1-queue1 consumer_queue1.go && \
+    go build -o ./out/consumer1-queue2 consumer_queue2.go && \
+    go build -o ./out/consumer2-queue2 consumer_queue2.go
 
 USER 0
 
