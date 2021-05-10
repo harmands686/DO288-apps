@@ -36,13 +36,18 @@ func main() {
         failOnError(err, "Failed to declare an exchange")
 
         //*****************Queues declarations*************************
-        q1, err := ch.QueueDeclare(
+	
+		//********adding x-arguments for queue***********
+		args := make(amqp.Table)
+		args["x-queue-type"] = "quorum"
+
+	q1, err := ch.QueueDeclare(
                 "hello_queue1", // name
                 true,   // durable
                 false,   // delete when unused
                 false,   // exclusive
-false,   // no-wait
-                nil,     // arguments
+                false,   // no-wait
+                args,     // arguments
         )
         failOnError(err, "Failed to declare a queue")
 
@@ -52,7 +57,7 @@ false,   // no-wait
                 false,   // delete when unused
                 false,   // exclusive
                 false,   // no-wait
-                nil,     // arguments
+                args,     // arguments
         )
         failOnError(err, "Failed to declare a queue")
 
