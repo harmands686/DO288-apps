@@ -33,7 +33,8 @@ RUN chgrp -R 0 ${APP_ROOT} ${GOLANG_PACKAGE} && \
     go build -o ./out/publisher publisher.go && \
     go build -o ./out/consumer1-queue1 consumer_queue1.go && \
     go build -o ./out/consumer1-queue2 consumer_queue2.go && \
-    go build -o ./out/consumer2-queue2 consumer_queue2.go
+    go build -o ./out/consumer2-queue2 consumer_queue2.go && \
+    go build -o ./out/nack-consumer-queue2 nack_consumer_queue2.go
 
 USER 0
 
