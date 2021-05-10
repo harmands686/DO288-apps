@@ -34,7 +34,9 @@ func main() {
 	)
 	failOnError(err, "Failed to register a subscriber")
 
-  msgs.Nack(true,false)	
-  log.Printf("Nack::Requeue=false >> Received a message: %s", d.Body)
+	for d := range msgs {
+  		d.Nack(false,false)	
+  		log.Printf("Nack::Requeue=false >> Received a message: %s", d.Body)
+	}
 
 }
